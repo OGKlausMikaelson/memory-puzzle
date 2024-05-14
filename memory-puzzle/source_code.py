@@ -56,9 +56,33 @@ def main() :
     firstSelection = None # stores the (x,y) of the first box revealed
 
     DISPLAYSURF.fill(BGCOLOR) #drawing the board
-    drawBoard(mainBoard,revealedBoxes)
+    startGameAnimation(mainBoard)
 
-    for event in pygame.event.get(): # event handling loop
-        if event.type == 'QUIT' 
+    while True: # main game loop
+        mouseClicked = False
 
+        DISPLAYSURF.fill(BGCLOR) # drawing the window
+        drawBoard(mainBoard, revealedBoxes)
+
+        for event in pygame.event.get(): # event handling loop
+            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE) :
+                pygame.quit()
+                sys.quit()
+            elif event.type == MOUSEMOTION:
+                mousex,mousey = event.pos
+            elif event.type == MOUSEBUTTONUP:
+                mousex,mousey = event.pos
+                mouseClicked = True
+
+        boxx, boxy = getBoxAtPixel(mousex,mousey)
+        if boxx!=None and boxy!=None:
+            #the mouse pointer is over the box
+            if not revealedBoxes[boxx][boxy]:
+                drawHighlightBox(boxx,boxy)
+            if not revealedBoxes[boxx][boxy] and mouseClicked :
+                
+            
+
+
+         
 

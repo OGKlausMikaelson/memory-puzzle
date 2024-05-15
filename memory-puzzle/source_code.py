@@ -80,7 +80,50 @@ def main() :
             if not revealedBoxes[boxx][boxy]:
                 drawHighlightBox(boxx,boxy)
             if not revealedBoxes[boxx][boxy] and mouseClicked :
-                
+                revealBoxesAnimation(mainBoard,[boxx,boxy])
+                revealedBoxes[boxx][boxy] = True #set the box as revealed
+                if firstSelection == 'None' : #the current box was the first box clicked
+                    firstSelection = (boxx,boxy)
+                else: # the current box clicked was the second box clicked
+                    #check if the second clicked box matches the first
+                    icon1shape, icon1color = getShapeAndColor(mainBoard,firstSelection[0],firstSelection[1])
+                    icon2shape, icon2color = getShapeAndColor(mainBoard,boxx,boxy)
+
+                    if icon1color != icon2color or icon1shape != icon2shape :
+                        # icons dont match recover both selected boxes
+                        pygame.time.wait(1000) #1000ms = 1 sec
+                        coverBoxesAnimation(mainBoard,[(firstSelection[0],firstSelection[1]),(boxx,boxy)])
+                        revealedBoxes[firstSelection[0]][firstSelection[1]] = False
+                        revealedBoxes[boxx][boxy] = False
+                    elif hasWon(revealedBoxes) : #check if all pairs found
+                        gameWonAnimation(mainBoard)
+                        pygame.time.wait(2000)
+
+                        #Reset the board 
+                        mainBoard = getRandomizedBoard()
+                        revealedBoxes = generateRevealedBoxesData(False)
+
+                        #Show the fully unrevealed board for a second
+                        drawBoard(mainBoard,revealedBoxes)
+                        pygame.display.update()
+                        pygame.time.wait(1000)
+
+                        #Replay the start game animation
+                        startGameAnimation(mainBoard)
+                    firstSelection = None # reset first selection variable
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+def generateRevealedBoxesData(val):
+    revealedBoxes = []
+    for i in range(BOARDWIDTH):
+        revealedBoxes.append([val]*BOARDHEIGHT)
+    return revealedBoxes
+
+def getRandomizedBoard():
+            
+
+
             
 
 

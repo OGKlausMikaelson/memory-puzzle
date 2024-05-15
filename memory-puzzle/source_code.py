@@ -121,10 +121,16 @@ def generateRevealedBoxesData(val):
     return revealedBoxes
 
 def getRandomizedBoard():
-            
+    # get a list of all possible shape in every possible order
+    icons = []
+    for color in ALLCOLORS:
+        for shape in ALLSHAPES:
+            icons.append((color,shape))
+    random.shuffle(icons)
 
-
-            
+    #Create board data structure , with rabdomly placed icons
+    
+                
 
 
          

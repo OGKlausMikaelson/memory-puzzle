@@ -171,8 +171,9 @@ def drawIcon(shape,color,boxx,boxy):
         pygame.draw.circle(DISPLAYSURF, color, (left+half,top+half),half-5)
         pygame.draw.circle(DISPLAYSURF, BGCOLOR, (left+half,top+half),quarter-5)
     elif shape == SQUARE:
-        pygame.draw.rect(DISPLAYSURF, )
-
+        pygame.draw.rect(DISPLAYSURF, color, (left + quarter, top+quarter, BOXSIZE-half,BOXSIZE-half))
+    elif shape == DIAMOND:
+        pygame.draw.polygon(DISPLAYSURF, color, ((left+half,top),(left+BOXSIZE-1,top+half)))
 
 
 

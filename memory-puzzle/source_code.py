@@ -129,7 +129,54 @@ def getRandomizedBoard():
     random.shuffle(icons)
 
     #Create board data structure , with rabdomly placed icons
-    
+    board = []
+    for x in range(BOARDWIDTH):
+        column = []
+        for y in range(BOARDHEIGHT):
+            column.append(icons[0])
+            del icons[0] # remove the icons as soons as we assign them
+        board.append(column)
+    return (board)
+
+def splitIntoGroupsOf(groupSize,theList):
+    #splits a list into a list of lists, where the inner list have at
+    # most groupSize number of items.
+    result = []
+    for i in range(0,len(theList),groupSize):
+        result.append(theList[i:i + groupSize])
+    return result
+
+def letTopCoordsOfBox(boxx,boxy):
+    #convert box coordinates to pixels coordinates
+    left = boxx * (BOXSIZE + GAPSIZE) + XMARGIN
+    right = boxy* (BOXSIZE + GAPSIZE) + YMARGIN
+    return (left,right)
+
+def getBoxAtPixel(x,y):
+    for boxx in range(BOARDWIDTH):
+         for boxy in range(BOARDHEIGHT):
+             left,top=leftTopCoordsOfBox(boxx,boxy)
+             boxRect = pygame.Rect(left,top,BOXSIZE,BOXSIZE)
+             if boxRect.collidepoint(x,y):
+                 return (boxx,boxy)
+    return (None,None)
+
+def drawIcon(shape,color,boxx,boxy):
+    quarter = int(BOXSIZE * 0.25) # syntactic sugar
+    half    = int(BOXSIZE * 0.50) # Ssyntatic sugar
+
+    left, top = leftTopCoordOfBox(boxx,boxy) # get pixels coords from board coordinates
+    # Draw the shape
+    if shape == DONUT:
+        pygame.draw.circle(DISPLAYSURF, color, (left+half,top+half),half-5)
+        pygame.draw.circle(DISPLAYSURF, BGCOLOR, (left+half,top+half),quarter-5)
+    elif shape == SQUARE:
+        pygame.draw.rect(DISPLAYSURF, )
+
+
+
+
+
                 
 
 

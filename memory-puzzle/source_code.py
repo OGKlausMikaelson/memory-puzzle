@@ -173,11 +173,45 @@ def drawIcon(shape,color,boxx,boxy):
     elif shape == SQUARE:
         pygame.draw.rect(DISPLAYSURF, color, (left + quarter, top+quarter, BOXSIZE-half,BOXSIZE-half))
     elif shape == DIAMOND:
-        pygame.draw.polygon(DISPLAYSURF, color, ((left+half,top),(left+BOXSIZE-1,top+half)))
+        pygame.draw.polygon(DISPLAYSURF, color, ((left+half,top),(left+BOXSIZE-1,top+half),(left+half,top+BOXSIZE-1), (left, top+half)))
 
+    elif shape == LINES:
+        for i in range(0,BOXSIZE,4):
+            pygame.draw.line(DISPLAYSURF, color, (left, top+i), (left+i, top))
+            pygame.draw.line(DISPLAYSURF, color, (left + i,top+BOXSIZE-1),(left+BOXSIZE-1,top+i))
+    elif shape == OVAL:
+        pygame.draw.ellipse(DISPLAYSURF,color, (left,top+quarter,BOXSIZE,half))
 
+def getShapeAndColor(board, boxx, boxy):
+    #shape value for x, y is stored in board[x][y][0]
+    #color value for x,y is stored in board [x][y][1]
+    return board[boxx][boxy][0], board[boxx][boxy][1]
 
+def drawBoxCovers(board, boxes, coverage):
+    #Draw boxes being covered/revealed. "boxes" is a list.
+    # of two-item lists, which have the x & y spot of the box.
+    for box in boxes:
+        left,top = leftTopCoordsOfBox(box[0], box[1])
+        pygame.draw.rect(DISPLAYSURF, BGCOLOR, (left, top, BOXSIZE, BOXSIZE))
+        shape, color = getShapeAndColor(board, box[0], box[1])
+        drawIcon(shape, color, box[0], box[1])
+        if coverage>0: # draw the coverage if there is a coverage
+            pygame.draw.rect(DISPLAYSURF,BOXCOLOR, (left, top, coverage, BOXSIZE))
+    pygame.display.update()
+    FPSCLOCK.tick(FPS)
 
+def revealBoxesAnimation(board,boxesToReveal):
+    #Do the box "reveal" animation
+    for coverage in range(BOXSIZE, (-REVEALSPEED)-1, -REVEALSPEED):
+        drawBoxCovers(board, boxesToReveal, coverage)
+
+def coverBoxesAnimation(board, boxesToCover):
+    #Do the box "cover" animation
+    for coverage in range(0,BOXSIZE+REVEALSPEED,REVEALSPEED):
+        drawBoxCovers(board,coverBoxesAnimation,coverage)
+
+def drawBoard(board,revealed):
+    
                 
 
 

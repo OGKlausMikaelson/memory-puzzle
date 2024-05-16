@@ -211,6 +211,62 @@ def coverBoxesAnimation(board, boxesToCover):
         drawBoxCovers(board,coverBoxesAnimation,coverage)
 
 def drawBoard(board,revealed):
+    # Draw all of the boxes in their covered or revealed state.
+    for boxx in range(BOARDWIDTH):
+        for boxy in range(BOARDHEIGHT):
+            left, top = letTopCoordsOfBox(boxx,boxy)
+            if not revealed[boxx][boxy]:
+                # draw a covered box
+                pygame.draw.rect(DISPLAYSURF,BOXCOLOR,(left,top,BOXSIZE,BOXSIZE))
+            else:
+                # Draw the (revealed) icon.
+                shape, color = getShapeAndColor(board,boxx,boxy)
+                drawIcon(shape,color,boxx,boxy)
+
+def drawHighlightBox(boxx,boxy):
+    left,top = letTopCoordsOfBox(boxx,boxy)
+    pygame.draw.rect(DISPLAYSURF,HIGHLIGHTCOLOR, (left-5,top-5,BOXSIZE+10, BOXSIZE+10),4)
+
+
+def startGameAnimation(board):
+    #Randomnly reveal boxes 8 at a time.
+    coveredBoxes = generateRevealedBoxesData(False)
+    boxes = []
+    for x in range(BOARDWIDTH):
+        for y in range(BOARDHEIGHT):
+            boxes.append((x,y))
+    random.shuffle(boxes)
+    boxGroups = splitIntoGroupsOf(8,boxes)
+
+    drawBoard(board, coveredBoxes)
+    for boxGroup in boxGroups:
+        revealBoxesAnimation(board,boxGroup)
+        coverBoxesAnimation(board,boxGroup)
+
+def gameWonAnimation(board):
+    # flash the bg color when player has won
+    coveredBoxes = generateRevealedBoxesData(True)
+    color1 = LIGHTBGCOLOR
+    color2 = BGCOLOR
+
+    for i in range(13):
+        color1,color2 = color2,color1 # swap colors
+        DISPLAYSURF.fill(color1)
+        drawBoard(board,coveredBoxes)
+        pygame.display.update()
+        pygame.time.wait(300)
+
+
+def hasWon(revealedBoxes):
+    # true if all boxes have been revealed else false
+    for i in revealedBoxes:
+        if False in i:
+            return False #return False if any of the boxes are covered
+    return False
+
+if __name__ == '__main__':
+    main()
+    
     
                 
 

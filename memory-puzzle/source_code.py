@@ -61,7 +61,7 @@ def main() :
     while True: # main game loop
         mouseClicked = False
 
-        DISPLAYSURF.fill(BGCLOR) # drawing the window
+        DISPLAYSURF.fill(BGCOLOR) # drawing the window
         drawBoard(mainBoard, revealedBoxes)
 
         for event in pygame.event.get(): # event handling loop
